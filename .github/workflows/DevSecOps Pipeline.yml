@@ -1,0 +1,125 @@
+name: DevSecOps Pipeline
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+
+  # Build Docker Image  
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Docker Image
+      run: |
+        docker build -t awesome-fastapi:${{ github.sha }} .  
+
+
+  # Run Pylint and Black formatter
+  lint_format:
+    name: Run lint and formatting checks with pylint and black
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          python-version: ["3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: 'Setup Python ${{ matrix.python-version}}'
+      uses: actions/setup-python@v3
+      with:
+        python-version: '${{ matrix.python-version}}'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+        pip install pylint black
+
+    - name: Run pylint
+      run: pylint $(git ls-files '*.py')
+      
+    - name: Run black
+      run: black --check .
+
+
+  # Run unit test cases for the Docker image
+  testing_phase:
+    name: Run unit test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest
+
+
+  # Run snyk code scanning for vulnerabilities
+  snyk_scan:      
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    runs-on: ubuntu-latest
+      
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ["3.12", "3.13"]
+
+  
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+          
+      - name: Install Snyk CLI
+        uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
+
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Snyk Code test
+        run: snyk code test --sarif > snyk-cide.sarif
+
+      - name: Snyk Test Dependencies
+        run: snyk test
+
+
+  # Scan the contianer and lists all security vulnerabilities
+  trivy_scans:
+    name: Run Trivy security scanner against the image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: 'awesome-fastapi:${{ github.sha }}'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'GitHub Actions/Trivy Automation'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+
