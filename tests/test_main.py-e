@@ -116,3 +116,4 @@ def test_secure_data_with_invalid_token():
     response = client.get("/secure-data", params={"token": "wrong_token"})
     assert response.status_code == 403
     assert response.json() == {"message": "Forbidden"}
+    
