@@ -3,13 +3,16 @@ name: Push Docker Image
 
 on:
     workflow_call:
-
+secrets:
+  # GitHub Container Registry token
+  GHCR_TOKEN:
+    required: true
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   username: ${{ github.actor }}
+
 jobs:
   build:
 
