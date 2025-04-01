@@ -29,7 +29,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-
+      - name: Debug Secrets
+        run: |
+          echo "GHCR_TOKEN is set to ${{ secrets.GHCR_TOKEN  != ''}}"
   
       - name: Extract Docker metadata
         id: meta
