@@ -9,8 +9,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  username: ${{ secrets.USERNAME }}
-  password: ${{ secrets.GHCR_TOKEN }}
 
 
 jobs:
@@ -25,18 +23,16 @@ jobs:
       # Login against a Docker registry 
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        uses: docker/login-action@3 
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
 
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
+        uses: docker/metadata-action@5 # v5.0.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
