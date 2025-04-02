@@ -12,11 +12,11 @@ env:
 
 jobs:
   Push_Image:
-    permissions:
-      security-events: write
-      contents: read
-      id-token: write
-      actions: read
+    # permissions:
+    #   security-events: write
+    #   contents: read
+    #   id-token: write
+    #   actions: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
