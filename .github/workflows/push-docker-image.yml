@@ -7,7 +7,7 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  IMAGE_NAME: 'awesome-fastapi:${{ github.sha }}'
+  IMAGE_NAME: 'awesome-fastapi'
 
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
           
 
       - name: Wait for Docker container to be ready
-        run: sleep 30
+        run: sleep 10
 
       - name: Confirm Docker container is running
         run: docker ps
