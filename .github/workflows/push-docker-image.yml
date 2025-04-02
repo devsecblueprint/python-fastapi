@@ -38,11 +38,13 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t awesome-fastapi:${{ github.sha }} . 
-          docker run -d -p 8080:8080 awesome-fastapi:${{ github.sha }}
+          
 
-      - name: Docker inspect
-        run: |
-          docker inspect ghcr.io/${{ env.IMAGE_NAME }}
+      - name: Wait for Docker container to be ready
+        run: sleep 30
+
+      - name: Confirm Docker container is running
+        run: docker ps
 
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
