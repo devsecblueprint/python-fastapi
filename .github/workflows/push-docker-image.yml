@@ -43,5 +43,5 @@ jobs:
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
         run: |
-          docker push ghcr.io/${{ env.IMAGE_NAME }}
+          docker push ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
     
