@@ -25,4 +25,4 @@ jobs:
     
     push-docker-image:
         uses: ./.github/workflows/push-docker-image.yml
-        needs: build-image
+        needs: unit-sec-scan
