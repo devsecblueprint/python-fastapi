@@ -25,7 +25,4 @@ jobs:
     
     push-docker-image:
         uses: ./.github/workflows/push-docker-image.yml
-        needs: unit-sec-scan
-        secrets:
-            password: ${{ secrets.GHCR_TOKEN }}
-            username: ${{ github.actor }}
+        needs: build-image

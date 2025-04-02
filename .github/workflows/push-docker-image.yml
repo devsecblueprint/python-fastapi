@@ -3,10 +3,7 @@ name: Push Docker Image
 
 on:
     workflow_call:
-secrets:
-  # GitHub Container Registry token
-  GHCR_TOKEN:
-    required: true
+
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -14,8 +11,12 @@ env:
   username: ${{ github.actor }}
 
 jobs:
-  build:
-
+  Push_Image:
+    permissions:
+      security-events: write
+      contents: read
+      id-token: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -29,7 +30,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GIT_TOKEN }}
 
 
   
