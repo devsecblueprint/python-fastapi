@@ -43,5 +43,5 @@ jobs:
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:testing
     
