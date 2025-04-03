@@ -42,7 +42,7 @@ jobs:
       # Build and tag Docker Image    
       - name: Build Docker Image
         run: |
-         docker build -t ${{ steps.meta.outputs.tags }} .
+         docker build -t ${{ env.IMAGE_NAME }}/${{ steps.meta.outputs.tags }} .
          docker tag ${{ env.IMAGE_NAME }}/${{ steps.meta.outputs.tags }}:testing
 
       - name: Wait for Docker container to be ready
