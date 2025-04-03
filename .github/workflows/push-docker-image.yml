@@ -49,11 +49,6 @@ jobs:
           docker tag ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
           docker tag ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:testing
 
-      - name: Wait for Docker container to be ready
-        run: sleep 30
-
-      - name: Confirm Docker container is running
-        run: docker ps
 
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
