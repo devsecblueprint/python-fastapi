@@ -9,6 +9,7 @@ permissions:
   security-events: write
   actions: read
   id-token: write
+  packages: write
 
   
 jobs: 
