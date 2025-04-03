@@ -42,8 +42,12 @@ jobs:
       # Build and tag Docker Image    
       - name: Build Docker Image
         run: |
-         docker build -t ${{ env.IMAGE_NAME }}/${{ steps.meta.outputs.tags }} .
-         docker tag ${{ env.IMAGE_NAME }}/${{ steps.meta.outputs.tags }}:testing
+         docker build -t ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+        
+      - name: Tag Docker Image
+        run: |
+          docker tag ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }} ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:testing
 
       - name: Wait for Docker container to be ready
         run: sleep 30
@@ -54,5 +58,6 @@ jobs:
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
         run: |
-          docker push ghcr.io/${{ steps.meta.outputs.tags }}
+          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
           docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:testing
