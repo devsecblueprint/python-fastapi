@@ -33,7 +33,9 @@ jobs:
       # Build Docker Image    
       - name: Build Docker Image
         run: |
-          docker build -t ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }} . 
+         docker build -t ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }} .
+         docker tag ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }} ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+ 
           
 
       - name: Wait for Docker container to be ready
@@ -45,5 +47,5 @@ jobs:
       # Push the Docker image to the registry
       - name: Push Docker Image to GHCR
         run: |
-          docker push ghcr.io/${{ env.IMAGE_NAME }}
-    
+          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+          docker push ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
