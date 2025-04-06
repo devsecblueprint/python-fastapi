@@ -16,3 +16,4 @@ jobs:
     - name: Build Docker Image
       run: |
         docker build -t awesome-fastapi:${{ github.sha }} . 
+        
