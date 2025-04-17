@@ -1,30 +1,51 @@
-name: Linting and Formating checks
+name: Linting and Formatting Checks
 on:
-    workflow_call:
+  workflow_call:
 
-jobs:  
-    # Run Pylint and Black formatter
-  lint_format:
-    name: Run lint and formatting checks with pylint and black
+jobs:
+  # Run Pylint
+  pylint:
+    name: Run pylint checks
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-          python-version: ["3.12.6"]
+      matrix:
+        python-version: ["3.12.6"]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: 'Setup Python ${{ matrix.python-version}}'
-      uses: actions/setup-python@v3
-      with:
-        python-version: '${{ matrix.python-version}}'
+      - uses: actions/checkout@v4
+      - name: "Setup Python ${{ matrix.python-version}}"
+        uses: actions/setup-python@v3
+        with:
+          python-version: "${{ matrix.python-version}}"
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        python -m pip install --upgrade pip
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          python -m pip install --upgrade pip
 
-    - name: Run pylint
-      run: pylint .
-      
-    - name: Run black
-      run: black --check .
+      - name: Run pylint
+        run: pylint .
+
+    # Run Black
+  black:
+    name: Run black formatting checks
+    runs-on: ubuntu-latest
+    needs: pylint
+    strategy:
+      matrix:
+        python-version: ["3.12.6"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Setup Python ${{ matrix.python-version}}"
+        uses: actions/setup-python@v3
+        with:
+          python-version: "${{ matrix.python-version}}"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+
+      - name: Run black
+        run: black --check .
