@@ -1,7 +1,8 @@
 name: Main Workflow
 on:
   push:
-  
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -11,19 +12,18 @@ permissions:
   id-token: write
   packages: write
 
-  
-jobs: 
-    build-image:
-        uses: ./.github/workflows/build-image.yml
+jobs:
+  build-image:
+    uses: ./.github/workflows/build-image.yml
 
-    lint-format:
-        uses: ./.github/workflows/lint-format.yml
-        needs: build-image
-    
-    unit-sec-scan:
-        uses: ./.github/workflows/unit-sec-test.yml
-        needs: lint-format
-    
-    push-docker-image:
-        uses: ./.github/workflows/push-docker-image.yml
-        needs: unit-sec-scan
+  lint-format:
+    uses: ./.github/workflows/lint-format.yml
+    needs: build-image
+
+  unit-sec-scan:
+    uses: ./.github/workflows/unit-sec-test.yml
+    needs: lint-format
+
+  push-docker-image:
+    uses: ./.github/workflows/push-docker-image.yml
+    needs: unit-sec-scan

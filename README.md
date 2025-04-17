@@ -36,8 +36,8 @@ gcp-python-fastapi/
 If you haven't cloned the project yet, use the following command:
 
 ```bash
-git clone https://github.com/your-username/awesome-fastapi.git
-cd awesome-fastapi
+git clone https://github.com/your-username/python-fastapi.git
+cd python-fastapi
 ```
 
 ### 2. Build the Docker image
@@ -45,7 +45,7 @@ cd awesome-fastapi
 To build the Docker image, run the following command in the root of the project directory:
 
 ```bash
-docker build -t awesome-fastapi .
+docker build -t python-fastapi .
 ```
 
 ### 3. Run the Docker container
@@ -53,7 +53,7 @@ docker build -t awesome-fastapi .
 After the image is built, run the container:
 
 ```bash
-docker run -d -p 80:80 awesome-fastapi
+docker run -d -p 80:80 python-fastapi
 ```
 
 This command will run the FastAPI app on port 80 of your localhost.

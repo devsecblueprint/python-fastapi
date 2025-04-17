@@ -7,7 +7,7 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  IMAGE_NAME: 'awesome-fastapi'
+  IMAGE_NAME: 'python-fastapi'
 
 
 jobs:

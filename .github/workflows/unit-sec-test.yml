@@ -1,4 +1,4 @@
-name: Unit and Security Testing
+name: Unit and Security Scanning
 on:
   workflow_call:
 
@@ -7,6 +7,7 @@ jobs:
   testing_phase:
     name: Run unit test
     runs-on: ubuntu-latest
+    needs: ['trivy_scans', 'owasp_zap_scan']  # Ensure this job runs after the security scans
 
     steps:
     - name: Checkout repository
@@ -29,12 +30,12 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t awesome-fastapi:${{ github.sha }} .   ###- This section needed to be added becasue the image was not persisting between jobs--##
+          docker build -t python-fastapi:${{ github.sha }} .   ###- This section needed to be added becasue the image was not persisting between jobs--##
 
       - name: Run Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'awesome-fastapi:${{ github.sha }}'
+          image-ref: 'python-fastapi:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
@@ -55,8 +56,8 @@ jobs:
           # Run Docker Image in detached mode
           - name: Build Docker Image
             run: |
-              docker build -t awesome-fastapi:${{ github.sha }} .
-              docker run -d -p 8080:8080 awesome-fastapi:${{ github.sha }}
+              docker build -t python-fastapi:${{ github.sha }} .
+              docker run -d -p 8080:8080 python-fastapi:${{ github.sha }}
               
           - name: Wait for Docker container to be ready
             run: sleep 30
