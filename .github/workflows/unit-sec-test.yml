@@ -33,7 +33,7 @@ jobs:
           docker build -t python-fastapi:${{ github.sha }} .   ###- This section needed to be added becasue the image was not persisting between jobs--##
 
       - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
         with:
           image-ref: 'python-fastapi:${{ github.sha }}'
           format: 'sarif'
